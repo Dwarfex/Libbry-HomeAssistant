@@ -24,3 +24,11 @@ testpaths = [
     "tests",
 ]
 asyncio_mode = "auto"
+
+[tool.semantic_release]
+version_toml = ["pyproject.toml:project.version"]
+branch = "main"
+upload_to_pypi = false
+upload_to_release = true
+build_command = "echo 'No build step configured'"
+commit_message = "chore(release): {version} [skip ci]"

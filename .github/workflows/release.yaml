@@ -1,0 +1,36 @@
+name: Release
+
+on:
+  workflow_run:
+    workflows: ["Tests"]
+    types:
+      - completed
+
+permissions:
+  contents: write
+
+jobs:
+  semantic-release:
+    if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push' && github.event.workflow_run.head_branch == 'main' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.workflow_run.head_branch }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install python-semantic-release
+        run: |
+          python -m pip install --upgrade pip
+          pip install python-semantic-release
+
+      - name: Create semantic release and tag
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: semantic-release publish

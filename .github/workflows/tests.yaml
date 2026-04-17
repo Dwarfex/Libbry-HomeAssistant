@@ -77,9 +77,25 @@ jobs:
       - name: Run isort
         run: isort . --diff --check --profile black
 
+  validate-hacs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: HACS validation
+        uses: hacs/action@main
+        with:
+          category: integration
+          ignore: brands
+
+  hassfest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: home-assistant/actions/hassfest@master
+
   test-pr:
     if: github.event_name == 'pull_request'
-    needs: [black-formatted, py-linted, imports-sorted]
+    needs: [black-formatted, py-linted, imports-sorted, validate-hacs, hassfest]
     runs-on: ubuntu-latest
     container:
       image: python:3.12-slim
@@ -103,7 +119,7 @@ jobs:
 
   test-main:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    needs: [black-auto-fix, py-linted, imports-sorted]
+    needs: [black-auto-fix, py-linted, imports-sorted, validate-hacs, hassfest]
     runs-on: ubuntu-latest
     container:
       image: python:3.12-slim

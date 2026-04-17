@@ -15,4 +15,7 @@ class LibraryConfig:
     def from_json_by_country(
         data: dict[str, dict[str, dict[str, any]]],
     ) -> dict[str, dict[str, Self]]:
-        return {country: LibraryConfig.from_json(libraries) for country, libraries in data.items()}
+        return {
+            country: LibraryConfig.from_json(libraries)
+            for country, libraries in data.items()
+        }

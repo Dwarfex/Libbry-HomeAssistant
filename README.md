@@ -111,6 +111,8 @@ After installing from hacs, setup can be started from this link:
 ## Germany:
 * Hamburg Buecherhallen
 
+_Release trigger note: this README was intentionally updated to create a new semantic-release candidate commit._
+
 ## Example cards
 ### Requirements:
 [lovelace-auto-entities](https://github.com/thomasloven/lovelace-auto-entities)    

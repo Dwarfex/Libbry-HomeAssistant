@@ -1,12 +1,12 @@
 {
     "domain": "libbry_libs",
     "name": "Libbry",
-    "codeowners": ["@PTST"],
+    "codeowners": ["@Dwarfex"],
     "config_flow": true,
     "dependencies": [],
-    "documentation": "https://github.com/PTST/DanskeBiblioteker-HomeAssistant",
+    "documentation": "https://github.com/Dwarfex/Libbry-HomeAssistant",
     "iot_class": "cloud_polling",
-    "issue_tracker": "https://github.com/PTST/DanskeBiblioteker-HomeAssistant/issues",
+    "issue_tracker": "https://github.com/Dwarfex/Libbry-HomeAssistant/issues",
     "requirements": [],
     "version": "1.0.0"
 }

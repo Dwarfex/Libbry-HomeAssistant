@@ -1,6 +1,6 @@
 {
-    "domain": "danish_libraries",
-    "name": "Danske Biblioteker",
+    "domain": "libbry_libs",
+    "name": "Libbry",
     "codeowners": ["@PTST"],
     "config_flow": true,
     "dependencies": [],

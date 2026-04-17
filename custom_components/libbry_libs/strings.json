@@ -2,7 +2,7 @@
     "config": {
         "step": {
             "user": {
-                "title": "Danish Libraries Configuration",
+                "title": "Libbry Configuration",
                 "description": "Sign-in with your Danish Library account",
                 "data": {
                     "municipality": "Municipality / library",
@@ -11,8 +11,8 @@
                 }
             },
             "options": {
-                "title": "Danish Libraries Configuration",
-                "description": "Set settings for the Danish Libraries integration.",
+                "title": "Libbry Configuration",
+                "description": "Set settings for the Libbry integration.",
                 "data": {
                     "get_reservations": "Include data for library reservations",
                     "get_ereolen": "Include data from e-reolen"
@@ -39,8 +39,8 @@
     "options": {
         "step": {
             "init": {
-                "title": "Danish Libraries Configuration",
-                "description": "Change settings for the Danish Libraries integration.",
+                "title": "Libbry Configuration",
+                "description": "Change settings for the Libbry integration.",
                 "data": {
                     "get_reservations": "Include data for library reservations",
                     "get_ereolen": "Include data from e-reolen"

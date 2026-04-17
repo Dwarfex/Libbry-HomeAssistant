@@ -1,0 +1,51 @@
+{
+    "config": {
+        "step": {
+            "user": {
+                "title": "Libbry-Konfiguration",
+                "description": "Melden Sie sich mit Ihrem dänischen Bibliothekskonto an",
+                "data": {
+                    "municipality": "Gemeinde / Bibliothek",
+                    "username": "Benutzername / CPR-Nr.",
+                    "password": "Passwort"
+                }
+            },
+            "options": {
+                "title": "Libbry-Konfiguration",
+                "description": "Legen Sie Einstellungen für die Libbry-Integration fest.",
+                "data": {
+                    "get_reservations": "Daten für Bibliotheksreservierungen einbeziehen",
+                    "get_ereolen": "Daten von e-reolen einbeziehen"
+                }
+            },
+            "reauth_confirm": {
+                "description": "Authentifizieren Sie sich erneut mit Ihrem dänischen Bibliothekskonto.",
+                "data": {
+                    "municipality": "Gemeinde / Bibliothek",
+                    "username": "Benutzername / CPR-Nr.",
+                    "password": "Passwort"
+                }
+            }
+        },
+        "error": {
+            "invalid_auth": "Ungültige Authentifizierung",
+            "unknown": "Unerwarteter Fehler"
+        },
+        "abort": {
+            "already_configured": "Konto ist bereits konfiguriert",
+            "reauth_successful": "Erneute Authentifizierung war erfolgreich"
+        }
+    },
+    "options": {
+        "step": {
+            "init": {
+                "title": "Libbry-Konfiguration",
+                "description": "Ändern Sie Einstellungen für die Libbry-Integration.",
+                "data": {
+                    "get_reservations": "Daten für Bibliotheksreservierungen einbeziehen",
+                    "get_ereolen": "Daten von e-reolen einbeziehen"
+                }
+            }
+        }
+    }
+}

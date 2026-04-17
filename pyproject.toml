@@ -1,5 +1,5 @@
 [project]
-name = "danskebiblioteker-homeassistant"
+name = "libbry-homeassistant"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"

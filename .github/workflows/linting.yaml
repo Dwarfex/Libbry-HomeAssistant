@@ -30,7 +30,7 @@ jobs:
       - name: Install pylint
         run: pip3 install pylint
       - name: Run pylint
-        run: pylint custom_components/danish_libraries/
+        run: pylint custom_components/libbry_libs/
 
   imports-sorted:
     runs-on: ubuntu-latest

@@ -1,7 +1,3 @@
-# import sys
-# import pathlib
-# path = str(pathlib.Path(__file__).parent.parent.joinpath('custom_components').joinpath("danish_libraries").resolve())
-# sys.path.insert(0, path)
 
 import asyncio
 import os
@@ -9,11 +5,10 @@ import os
 import dotenv
 import pytest
 
-from custom_components.danish_libraries.api import Library
-from custom_components.danish_libraries.models import (
+from custom_components.libbry_libs.api import Library
+from custom_components.libbry_libs.models import (
     EreolenLoan,
     EreolenReservation,
-    LibraryConfig,
     Loan,
     ProfileInfo,
     Reservation,

@@ -2,7 +2,7 @@
     "config": {
         "step": {
             "user": {
-                "title": "Danske Biblioteker opsætning",
+                "title": "Libbry opsætning",
                 "description": "Log på din biblioteks konto",
                 "data": {
                     "municipality": "Kommune / bibliotek",
@@ -11,7 +11,7 @@
                 }
             },
             "options": {
-                "title": "Danske Biblioteker opsætning",
+                "title": "Libbry opsætning",
                 "description": "Indstillinger for integrationen",
                 "data": {
                     "get_reservations": "Inkluder data for reserveringer",
@@ -39,7 +39,7 @@
     "options": {
         "step": {
             "init": {
-                "title": "Danske Biblioteker indstillinger",
+                "title": "Libbry indstillinger",
                 "description": "Indstillinger for integrationen",
                 "data": {
                     "get_reservations": "Inkluder data for reserveringer",

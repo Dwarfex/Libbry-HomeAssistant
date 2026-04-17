@@ -21,7 +21,8 @@ MUNICIPALITY = os.getenv("MUNICIPALITY")
 
 if not all([LIBRARY_USER_ID, LIBRARY_PIN, MUNICIPALITY]):
     pytestmark = pytest.mark.skip(
-        reason="Integration credentials are not configured (LIBRARY_USER_ID, LIBRARY_PIN, MUNICIPALITY)"
+        reason="Integration credentials are not configured "
+        "(LIBRARY_USER_ID, LIBRARY_PIN, MUNICIPALITY)"
     )
 
 

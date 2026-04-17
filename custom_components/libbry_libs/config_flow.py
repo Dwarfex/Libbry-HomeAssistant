@@ -1,5 +1,7 @@
 """Config flow for Library integration."""
 
+from typing import Any
+
 import voluptuous as vol
 from homeassistant.config_entries import ConfigEntry, ConfigFlow, OptionsFlow
 from homeassistant.const import CONF_PASSWORD, CONF_USERNAME
@@ -31,7 +33,7 @@ class LibraryOptionsFlowHandler(OptionsFlow):
         self.entry = entry
 
     async def async_step_init(
-        self, user_input: dict[str, any] | None = None
+        self, user_input: dict[str, Any] | None = None
     ) -> FlowResult:
         """Manage the options."""
         if user_input is not None:
@@ -80,7 +82,7 @@ class LibraryConfigFlowHandler(ConfigFlow, domain=DOMAIN):
         self.user_real_name = None
 
     async def async_step_user(
-        self, user_input: dict[str, any] | None = None
+        self, user_input: dict[str, Any] | None = None
     ) -> FlowResult:
         """Handle the initial step."""
         errors: dict[str, str] = {}
@@ -89,7 +91,7 @@ class LibraryConfigFlowHandler(ConfigFlow, domain=DOMAIN):
 
         if user_input is not None:
             try:
-                # instantiate LibeView and login
+                # Instantiate library client and log in
                 library = Library(
                     municipality=municipality_options[user_input[CONF_MUNICIPALITY]],
                     user_id=user_input[CONF_USERNAME],
@@ -123,7 +125,7 @@ class LibraryConfigFlowHandler(ConfigFlow, domain=DOMAIN):
         )
 
     async def async_step_options(
-        self, user_input: dict[str, any] | None = None
+        self, user_input: dict[str, Any] | None = None
     ) -> FlowResult:
         if user_input is not None:
             self.get_ereolen = user_input[CONF_GET_EREOLEN]
@@ -148,13 +150,13 @@ class LibraryConfigFlowHandler(ConfigFlow, domain=DOMAIN):
             ),
         )
 
-    async def async_step_reauth(self, _: dict[str, any]) -> FlowResult:
+    async def async_step_reauth(self, _: dict[str, Any]) -> FlowResult:
         """Handle initiation of re-authentication with Library."""
         self.entry = self.hass.config_entries.async_get_entry(self.context["entry_id"])
         return await self.async_step_reauth_confirm()
 
     async def async_step_reauth_confirm(
-        self, user_input: dict[str, any] | None = None
+        self, user_input: dict[str, Any] | None = None
     ) -> FlowResult:
         """Handle re-authentication with Library."""
         errors: dict[str, str] = {}
@@ -163,7 +165,7 @@ class LibraryConfigFlowHandler(ConfigFlow, domain=DOMAIN):
 
         if user_input is not None:
             try:
-                # instantiate LibeView and login
+                # Instantiate library client and log in
                 library = Library(
                     municipality=municipality_options[user_input[CONF_MUNICIPALITY]],
                     user_id=user_input[CONF_USERNAME],

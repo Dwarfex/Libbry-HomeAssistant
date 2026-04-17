@@ -3,7 +3,7 @@
         "step": {
             "user": {
                 "title": "Libbry Configuration",
-                "description": "Sign-in with your Danish Library account",
+                "description": "Sign-in with your Library account",
                 "data": {
                     "municipality": "Municipality / library",
                     "username": "Username / CPR No",
@@ -19,7 +19,7 @@
                 }
             },
             "reauth_confirm": {
-                "description": "Re-authenticate with your Danish Library account.",
+                "description": "Re-authenticate with your Library account.",
                 "data": {
                     "municipality": "Municipality / library",
                     "username": "Username / CPR No",

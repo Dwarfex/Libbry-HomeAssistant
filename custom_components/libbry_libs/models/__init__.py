@@ -1,5 +1,6 @@
-from .ereolen_loan import EreolenLoan
-from .ereolen_reservation import EreolenReservation
+from .ereolen.loan import Loan as EreolenLoan
+from .ereolen.reservation import Reservation as EreolenReservation
+from .interfaces import BaseLoan, BaseReservation
 from .library_config import LibraryConfig
 from .loan import Loan
 from .profile_info import ProfileInfo

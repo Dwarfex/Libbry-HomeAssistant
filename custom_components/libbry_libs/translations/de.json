@@ -3,7 +3,7 @@
         "step": {
             "user": {
                 "title": "Libbry-Konfiguration",
-                "description": "Melden Sie sich mit Ihrem dänischen Bibliothekskonto an",
+                "description": "Melden Sie sich mit Ihrem Bibliothekskonto an",
                 "data": {
                     "municipality": "Gemeinde / Bibliothek",
                     "username": "Benutzername / CPR-Nr.",
@@ -19,7 +19,7 @@
                 }
             },
             "reauth_confirm": {
-                "description": "Authentifizieren Sie sich erneut mit Ihrem dänischen Bibliothekskonto.",
+                "description": "Authentifizieren Sie sich erneut mit Ihrem Bibliothekskonto.",
                 "data": {
                     "municipality": "Gemeinde / Bibliothek",
                     "username": "Benutzername / CPR-Nr.",

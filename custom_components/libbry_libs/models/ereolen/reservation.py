@@ -1,13 +1,14 @@
 import json
 import logging
 from datetime import datetime
+from typing import Any
 
 
-class EreolenLoan:
+class Reservation:
     def __init__(
         self,
-        loan_data: dict[str, any],
-        look_up_data: dict[str, any],
+        reservation_data: dict[str, Any],
+        look_up_data: dict[str, Any],
         image_url: str,
     ):
         try:
@@ -30,25 +31,32 @@ class EreolenLoan:
             self.format = (
                 "Ebook" if not look_up_data["durationInSeconds"] else "Audiobook"
             )
-            self.due_date = datetime.fromisoformat(
-                loan_data["loanExpireDateUtc"]
-            ).date()
+            self.expected_available_date = (
+                datetime.fromisoformat(reservation_data["expectedRedeemDateUtc"]).date()
+                if reservation_data["expectedRedeemDateUtc"] is not None
+                else None
+            )
             self.description = look_up_data["description"]
         except Exception as e:
             logger = logging.getLogger(__package__)
             logger.warning(
-                "Could not parse data for Ereolen Loan, input: %s",
-                json.dumps(loan_data),
+                "Could not parse data for Ereolen Reservation, input: %s",
+                json.dumps(reservation_data),
             )
             logger.warning(e, exc_info=True)
 
+    @property
+    def expected_availble_date(self):
+        return self.expected_available_date
+
     def to_json(self):
         return {
-            "author": self.author,
             "title": self.title,
-            "narrator": self.narrator,
+            "author": self.author,
             "image_url": self.image_url,
             "description": self.description,
-            "due_date": self.due_date,
+            "narrator": self.narrator,
             "format": self.format,
+            "expected_available_date": self.expected_available_date,
+            "expected_availble_date": self.expected_availble_date,
         }

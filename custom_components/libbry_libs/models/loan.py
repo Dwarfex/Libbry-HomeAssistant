@@ -1,13 +1,14 @@
 import json
 import logging
 from datetime import date
+from typing import Any
 
 
 class Loan:
     def __init__(
         self,
-        loan_data: dict[str, any],
-        look_up_data: dict[str, any],
+        loan_data: dict[str, Any],
+        look_up_data: dict[str, Any],
         image_url: str,
     ):
         try:

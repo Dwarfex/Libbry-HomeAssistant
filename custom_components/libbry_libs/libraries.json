@@ -488,6 +488,7 @@
     },
     "germany": {
         "hamburg buecherhallen": {
+            "adapter": "hamburg",
             "name": "Hamburg Buecherhallen",
             "url": "https://www2.buecherhallen.de"
         }

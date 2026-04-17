@@ -1,13 +1,14 @@
 import json
 import logging
 from datetime import date
+from typing import Any
 
 
 class Reservation:
     def __init__(
         self,
-        reservation_data: dict[str, any],
-        look_up_data: dict[str, any],
+        reservation_data: dict[str, Any],
+        look_up_data: dict[str, Any],
         image_url: str,
     ):
         try:

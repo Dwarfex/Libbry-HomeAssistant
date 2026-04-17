@@ -11,7 +11,7 @@ from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import DOMAIN
 from .coordinator import LibraryCoordinator
-from .models import EreolenLoan, EreolenReservation, Loan, ProfileInfo, Reservation
+from .models import BaseLoan, BaseReservation, ProfileInfo
 
 
 async def async_setup_entry(
@@ -37,11 +37,11 @@ class LoanSensor(CoordinatorEntity, SensorEntity):
         return self.coordinator.data["profile_info"]
 
     @property
-    def loans(self) -> list[Loan]:
+    def loans(self) -> list[BaseLoan]:
         return self.coordinator.data["loans"]
 
     @property
-    def next_due_loan(self) -> Loan | None:
+    def next_due_loan(self) -> BaseLoan | None:
         if len(self.loans) > 0:
             return min(self.loans, key=lambda x: x.due_date)
         return None
@@ -82,18 +82,18 @@ class ReservationSensor(CoordinatorEntity, SensorEntity):
         return self.coordinator.data["profile_info"]
 
     @property
-    def reservations(self) -> list[Reservation]:
+    def reservations(self) -> list[BaseReservation]:
         return self.coordinator.data["reservations"]
 
     @property
-    def ready_for_pickup(self) -> list[Reservation]:
+    def ready_for_pickup(self) -> list[BaseReservation]:
         data = [res for res in self.reservations if res.pickup_deadline is not None]
         if len(data) > 0:
             data.sort(key=lambda item: item.pickup_deadline)
         return data
 
     @property
-    def in_queue(self) -> list[Reservation]:
+    def in_queue(self) -> list[BaseReservation]:
         data = [
             res
             for res in self.reservations
@@ -104,7 +104,7 @@ class ReservationSensor(CoordinatorEntity, SensorEntity):
         return data
 
     @property
-    def next_in_queue(self) -> Reservation | None:
+    def next_in_queue(self) -> BaseReservation | None:
         if len(self.in_queue) > 0:
             return min(self.in_queue, key=lambda x: x.number_in_queue)
         return None
@@ -146,11 +146,11 @@ class EreolenLoanSensor(CoordinatorEntity, SensorEntity):
         return self.coordinator.data["profile_info"]
 
     @property
-    def loans(self) -> list[EreolenLoan]:
+    def loans(self) -> list[BaseLoan]:
         return self.coordinator.data["ereolen_loans"]
 
     @property
-    def next_due_loan(self) -> EreolenLoan | None:
+    def next_due_loan(self) -> BaseLoan | None:
         if len(self.loans) > 0:
             return min(self.loans, key=lambda x: x.due_date)
         return None
@@ -191,7 +191,7 @@ class EreolenReservationSensor(CoordinatorEntity, SensorEntity):
         return self.coordinator.data["profile_info"]
 
     @property
-    def reservations(self) -> list[EreolenReservation]:
+    def reservations(self) -> list[BaseReservation]:
         return self.coordinator.data["ereolen_reservations"]
 
     @property

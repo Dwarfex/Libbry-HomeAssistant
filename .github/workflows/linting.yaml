@@ -2,8 +2,8 @@ name: Linting
 
 on:
   push:
-    branches:    
-      - main
+    branches:
+      - "**"
   pull_request:
     branches:
       - main
@@ -13,16 +13,49 @@ on:
 
 
 jobs:
+  black-auto-fix:
+    if: github.event_name == 'push' && github.ref != 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.ref }}
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.12"
+      - name: Install black
+        run: pip3 install black
+      - name: Apply black formatting
+        run: black .
+      - name: Auto-commit formatting changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "style: auto-format with black"
+          commit_user_name: github-actions[bot]
+          commit_user_email: 41898282+github-actions[bot]@users.noreply.github.com
+          commit_author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+
   black-formatted:
+    if: github.event_name != 'push' || github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: psf/black@stable
-  
+      - uses: actions/checkout@v6
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.12"
+      - name: Install black
+        run: pip3 install black
+      - name: Verify black formatting
+        run: black . --check
+
   py-linted:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Set up Python 3.12
         uses: actions/setup-python@v4
         with:
@@ -35,7 +68,7 @@ jobs:
   imports-sorted:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Set up Python 3.12
         uses: actions/setup-python@v4
         with:

@@ -11,13 +11,31 @@ on:
   workflow_dispatch:
 
 jobs:
+  lint-precondition:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.12"
+
+      - name: Install black
+        run: pip install black
+
+      - name: Verify black formatting
+        run: black . --check
+
   test:
+    needs: lint-precondition
     runs-on: ubuntu-latest
     container:
       image: python:3.12-slim
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Install project and test dependencies
         run: |

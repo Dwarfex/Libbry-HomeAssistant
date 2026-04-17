@@ -1,8 +1,8 @@
-name: HACS validation
+name: Validation
 
 on:
   push:
-    branches:    
+    branches:
       - main
   pull_request:
     branches:
@@ -21,3 +21,10 @@ jobs:
         with:
           category: "integration"
           ignore: "brands"
+
+  hassfest:
+    needs: validate-hacs
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: "actions/checkout@v6"
+      - uses: home-assistant/actions/hassfest@master

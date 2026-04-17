@@ -5,13 +5,16 @@ on:
     types: [opened, synchronize, reopened]
     branches:
       - main
-  push:
+  workflow_run:
+    workflows: ["Linting"]
+    types: [completed]
     branches:
       - main
   workflow_dispatch:
 
 jobs:
   lint-precondition:
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -28,8 +31,32 @@ jobs:
       - name: Verify black formatting
         run: black . --check
 
-  test:
+  test-pr:
+    if: github.event_name == 'pull_request'
     needs: lint-precondition
+    runs-on: ubuntu-latest
+    container:
+      image: python:3.12-slim
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Install project and test dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .
+          pip install homeassistant
+          pip install pytest pytest-asyncio python-dotenv
+
+      - name: Run tests
+        env:
+          LIBRARY_USER_ID: ${{ secrets.LIBRARY_USER_ID }}
+          LIBRARY_PIN: ${{ secrets.LIBRARY_PIN }}
+          MUNICIPALITY: ${{ secrets.MUNICIPALITY }}
+        run: pytest -q
+
+  test-main-after-linting:
+    if: github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     container:
       image: python:3.12-slim

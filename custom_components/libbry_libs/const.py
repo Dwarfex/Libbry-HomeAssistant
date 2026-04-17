@@ -37,11 +37,17 @@ INFO_GRAPH_QL_QUERY = "query getManifestationViaMaterialByFaust($faust: String!)
 IMAGE_FROM_PID_GRAPH_QL_QUERY = "query GetCoversByPids($pids: [String!]!) {manifestations(pid: $pids) {pid, cover {small {url} medium {url} large {url}}}}"
 SEARCH_ISBN_GRAPH_QL_QUERY = "query GetBestRepresentationPidByIsbn($cql: String!, $offset: Int!, $limit: PaginationLimitScalar!, $filters: ComplexSearchFiltersInput!) {complexSearch(cql: $cql, filters: $filters) {works(offset: $offset, limit: $limit) {workId manifestations {bestRepresentation {pid}}}}}"
 
+LIBRARIES_BY_COUNTRY: dict[str, dict[str, LibraryConfig]] = {}
 LIBRARIES: dict[str, LibraryConfig] = {}
 with open(
     pathlib.Path(__file__).parent.joinpath("libraries.json"), "r", encoding="UTF8"
 ) as f:
-    LIBRARIES = LibraryConfig.from_json(json.loads(f.read()))
+    LIBRARIES_BY_COUNTRY = LibraryConfig.from_json_by_country(json.loads(f.read()))
+    LIBRARIES = {
+        key: value
+        for country_libraries in LIBRARIES_BY_COUNTRY.values()
+        for key, value in country_libraries.items()
+    }
 
 LOGGER = logging.getLogger(__package__)
 PUBHUB_BASE_URL = "https://pubhub-openplatform.dbc.dk"

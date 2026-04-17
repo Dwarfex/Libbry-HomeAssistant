@@ -12,9 +12,17 @@ from .const import (
     CONF_GET_RESERVATIONS,
     CONF_MUNICIPALITY,
     DOMAIN,
-    LIBRARIES,
+    LIBRARIES_BY_COUNTRY,
     LOGGER,
 )
+
+
+def get_municipality_options() -> dict[str, str]:
+    return {
+        f"{country.title()} - {library.name}": municipality
+        for country, libraries in LIBRARIES_BY_COUNTRY.items()
+        for municipality, library in libraries.items()
+    }
 
 
 class LibraryOptionsFlowHandler(OptionsFlow):
@@ -77,11 +85,13 @@ class LibraryConfigFlowHandler(ConfigFlow, domain=DOMAIN):
         """Handle the initial step."""
         errors: dict[str, str] = {}
 
+        municipality_options = get_municipality_options()
+
         if user_input is not None:
             try:
                 # instantiate LibeView and login
                 library = Library(
-                    municipality=user_input[CONF_MUNICIPALITY],
+                    municipality=municipality_options[user_input[CONF_MUNICIPALITY]],
                     user_id=user_input[CONF_USERNAME],
                     pin=user_input[CONF_PASSWORD],
                     hass=self.hass,
@@ -93,12 +103,12 @@ class LibraryConfigFlowHandler(ConfigFlow, domain=DOMAIN):
                 LOGGER.debug("Could not log in to Library, %s", ex)
                 errors["base"] = "invalid_auth"
             else:
-                self.municipality = user_input[CONF_MUNICIPALITY]
+                self.municipality = municipality_options[user_input[CONF_MUNICIPALITY]]
                 self.user_id = user_input[CONF_USERNAME]
                 self.pin = user_input[CONF_PASSWORD]
                 return await self.async_step_options()
 
-        municipalities = sorted([value.name for value in LIBRARIES.values()])
+        municipalities = sorted(municipality_options.keys())
 
         return self.async_show_form(
             step_id="user",
@@ -149,11 +159,13 @@ class LibraryConfigFlowHandler(ConfigFlow, domain=DOMAIN):
         """Handle re-authentication with Library."""
         errors: dict[str, str] = {}
 
+        municipality_options = get_municipality_options()
+
         if user_input is not None:
             try:
                 # instantiate LibeView and login
                 library = Library(
-                    municipality=user_input[CONF_MUNICIPALITY],
+                    municipality=municipality_options[user_input[CONF_MUNICIPALITY]],
                     user_id=user_input[CONF_USERNAME],
                     pin=user_input[CONF_PASSWORD],
                     hass=self.hass,
@@ -168,7 +180,9 @@ class LibraryConfigFlowHandler(ConfigFlow, domain=DOMAIN):
                     self.entry,
                     data={
                         **data,
-                        CONF_MUNICIPALITY: user_input[CONF_MUNICIPALITY],
+                        CONF_MUNICIPALITY: municipality_options[
+                            user_input[CONF_MUNICIPALITY]
+                        ],
                         CONF_USERNAME: user_input[CONF_USERNAME],
                         CONF_PASSWORD: user_input[CONF_PASSWORD],
                     },
@@ -178,7 +192,7 @@ class LibraryConfigFlowHandler(ConfigFlow, domain=DOMAIN):
                 )
             return self.async_abort(reason="reauth_successful")
 
-        municipalities = sorted([value.name for value in LIBRARIES.values()])
+        municipalities = sorted(municipality_options.keys())
 
         return self.async_show_form(
             step_id="reauth_confirm",

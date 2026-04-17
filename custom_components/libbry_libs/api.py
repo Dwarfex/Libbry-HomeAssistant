@@ -59,9 +59,10 @@ def reauth_on_fail(func):
 
 class Library:
     def __init__(self, municipality: str, user_id: str, pin: str, hass=None):
-        if municipality.lower() not in LIBRARIES.keys():
+        municipality_key = municipality.lower()
+        if municipality_key not in LIBRARIES.keys():
             raise ValueError(f'Municipality "{municipality}" not found in list')
-        self.municipality = LIBRARIES[municipality.lower()]
+        self.municipality = LIBRARIES[municipality_key]
         self.user_id = user_id
         self.pin = pin
         self.session = None

@@ -27,6 +27,7 @@ asyncio_mode = "auto"
 
 [tool.semantic_release]
 version_toml = ["pyproject.toml:project.version"]
+version_variables = ["custom_components/libbry_libs/manifest.json:version"]
 branch = "main"
 upload_to_pypi = false
 upload_to_release = true

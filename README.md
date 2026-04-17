@@ -1,7 +1,12 @@
-<!-- ![Current Release](https://img.shields.io/github/release/PTST/DanskeBiblioteker-HomeAssistant/all.svg?style=plastic)
-![Github All Releases](https://img.shields.io/github/downloads/PTST/DanskeBiblioteker-HomeAssistant/total.svg?style=plastic) -->
+<!-- ![Current Release](https://img.shields.io/github/release/Dwarfex/Libbry-HomeAssistant/all.svg?style=plastic)
+![Github All Releases](https://img.shields.io/github/downloads/Dwarfex/Libbry-HomeAssistant/total.svg?style=plastic) -->
 
 # Libbry-HomeAssistant
+
+>
+> Currently broken due to changes in the API. -> Rewriting to support multiple contries / diffferent Library Systems.
+> 
+>
 Install the integration either manually or via HACS by adding this repo as a custom repo
 Add the Libbry integration by following the config flow in settings/integrations in your Home Assistant instance
 Login to your library account with you username and password

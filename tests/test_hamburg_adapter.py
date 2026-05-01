@@ -12,6 +12,7 @@ class HamburgMockAPI:
         self.login_calls = 0
         self.item_calls: dict[str, int] = {}
         self.force_unauthorized_once: set[str] = set()
+        self.force_non_json_once: set[str] = set()
 
     def __call__(self, request: httpx.Request) -> httpx.Response:
         if request.url.path == "/user/login" and request.method == "POST":
@@ -37,10 +38,13 @@ class HamburgMockAPI:
         if request.url.path == "/api/items" and request.method == "GET":
             assert (
                 request.headers.get("solus-app-id")
-                == "28d4dc2f-692b-472b-870d-5e6c35c4ad26"
+                == hamburg_module.HAMBURG_APP_ID
             )
             item_type = request.url.params.get("type")
             self.item_calls[item_type] = self.item_calls.get(item_type, 0) + 1
+
+            if item_type in self.force_non_json_once and self.item_calls[item_type] == 1:
+                return httpx.Response(200, text="<!DOCTYPE html><html>not json</html>")
 
             if (
                 item_type in self.force_unauthorized_once
@@ -93,11 +97,17 @@ class HamburgMockAPI:
 
 
 def _mock_hamburg_client(monkeypatch, api: HamburgMockAPI) -> None:
+    original_async_client = httpx.AsyncClient
+
+    mock_client_factory = lambda *_args, **_kwargs: original_async_client(
+        transport=httpx.MockTransport(api)
+    )
     monkeypatch.setattr(
         hamburg_module,
         "create_async_httpx_client",
-        lambda *_args, **_kwargs: httpx.AsyncClient(transport=httpx.MockTransport(api)),
+        mock_client_factory,
     )
+    monkeypatch.setattr(hamburg_module.httpx, "AsyncClient", mock_client_factory)
 
 
 async def test_hamburg_profile_and_loans_mapping(monkeypatch):
@@ -165,6 +175,22 @@ async def test_hamburg_ereolen_calls_return_empty_lists(monkeypatch):
 async def test_hamburg_reauth_on_403(monkeypatch):
     api = HamburgMockAPI()
     api.force_unauthorized_once.add("loans")
+    _mock_hamburg_client(monkeypatch, api)
+    lib = Library("hamburg buecherhallen", "user", "1234")
+
+    try:
+        loans = await lib.get_loans()
+    finally:
+        await lib.session.aclose()
+
+    assert len(loans) == 1
+    assert api.login_calls == 2
+    assert api.item_calls["loans"] == 2
+
+
+async def test_hamburg_reauth_on_non_json_response(monkeypatch):
+    api = HamburgMockAPI()
+    api.force_non_json_once.add("loans")
     _mock_hamburg_client(monkeypatch, api)
     lib = Library("hamburg buecherhallen", "user", "1234")
 

@@ -36,14 +36,14 @@ class HamburgMockAPI:
             )
 
         if request.url.path == "/api/items" and request.method == "GET":
-            assert (
-                request.headers.get("solus-app-id")
-                == hamburg_module.HAMBURG_APP_ID
-            )
+            assert request.headers.get("solus-app-id") == hamburg_module.HAMBURG_APP_ID
             item_type = request.url.params.get("type")
             self.item_calls[item_type] = self.item_calls.get(item_type, 0) + 1
 
-            if item_type in self.force_non_json_once and self.item_calls[item_type] == 1:
+            if (
+                item_type in self.force_non_json_once
+                and self.item_calls[item_type] == 1
+            ):
                 return httpx.Response(200, text="<!DOCTYPE html><html>not json</html>")
 
             if (

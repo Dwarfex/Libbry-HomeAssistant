@@ -39,7 +39,10 @@ class HamburgMockAPI:
             item_type = request.url.params.get("type")
             self.item_calls[item_type] = self.item_calls.get(item_type, 0) + 1
 
-            if item_type in self.force_unauthorized_once and self.item_calls[item_type] == 1:
+            if (
+                item_type in self.force_unauthorized_once
+                and self.item_calls[item_type] == 1
+            ):
                 return httpx.Response(403, text="forbidden")
 
             if item_type == "membership":

@@ -70,7 +70,9 @@ class HamburgLibraryAdapter(LibraryAdapter):
             if library.session.cookies.get(cookie_name) is None
         ]
         if missing_cookies:
-            LOGGER.warning("Hamburg login succeeded without expected cookies: %s", missing_cookies)
+            LOGGER.warning(
+                "Hamburg login succeeded without expected cookies: %s", missing_cookies
+            )
 
         self._patron_data = self._extract_patron_data(response_payload)
 
@@ -89,7 +91,9 @@ class HamburgLibraryAdapter(LibraryAdapter):
     async def get_loans(self, library):
         loans_payload = await self._authenticated_api_get(library, "loans")
         if not isinstance(loans_payload, list):
-            LOGGER.warning("Unexpected Hamburg loans payload: %s", type(loans_payload).__name__)
+            LOGGER.warning(
+                "Unexpected Hamburg loans payload: %s", type(loans_payload).__name__
+            )
             return []
 
         loans: list[Loan] = []
@@ -98,7 +102,9 @@ class HamburgLibraryAdapter(LibraryAdapter):
                 continue
             due_date = self._normalize_iso_date(item.get("dueObject"))
             if due_date is None:
-                LOGGER.warning("Skipping Hamburg loan without parseable due date: %s", item)
+                LOGGER.warning(
+                    "Skipping Hamburg loan without parseable due date: %s", item
+                )
                 continue
             loan_data = {
                 "isRenewable": bool(item.get("canRenew", False)),
@@ -114,7 +120,9 @@ class HamburgLibraryAdapter(LibraryAdapter):
     async def get_reservations(self, library):
         holds_payload = await self._authenticated_api_get(library, "holds")
         if not isinstance(holds_payload, list):
-            LOGGER.warning("Unexpected Hamburg holds payload: %s", type(holds_payload).__name__)
+            LOGGER.warning(
+                "Unexpected Hamburg holds payload: %s", type(holds_payload).__name__
+            )
             return []
 
         reservations: list[Reservation] = []
@@ -160,7 +168,11 @@ class HamburgLibraryAdapter(LibraryAdapter):
         )
 
         if response.status_code in (401, 403):
-            LOGGER.debug("Hamburg %s request returned %s, re-authenticating", item_type, response.status_code)
+            LOGGER.debug(
+                "Hamburg %s request returned %s, re-authenticating",
+                item_type,
+                response.status_code,
+            )
             await self.authenticate(library)
             response = await library.session.get(
                 f"{HAMBURG_BASE_URL}{HAMBURG_ITEMS_ENDPOINT}",
@@ -193,12 +205,16 @@ class HamburgLibraryAdapter(LibraryAdapter):
         try:
             return json.loads(response_text)
         except json.JSONDecodeError:
-            LOGGER.warning("Hamburg endpoint returned non-JSON response: %s", response_text[:300])
+            LOGGER.warning(
+                "Hamburg endpoint returned non-JSON response: %s", response_text[:300]
+            )
             raise
 
     @staticmethod
     def _has_auth_cookies(library) -> bool:
-        return all(library.session.cookies.get(cookie_name) for cookie_name in AUTH_COOKIE_KEYS)
+        return all(
+            library.session.cookies.get(cookie_name) for cookie_name in AUTH_COOKIE_KEYS
+        )
 
     @staticmethod
     def _normalize_profile_payload(
@@ -208,7 +224,9 @@ class HamburgLibraryAdapter(LibraryAdapter):
         current_membership = payload.get("currentMembership")
         patron_data = patron_payload if isinstance(patron_payload, Mapping) else {}
         if isinstance(current_membership, Mapping):
-            birthday = str(current_membership.get("startDate") or date.today().isoformat())
+            birthday = str(
+                current_membership.get("startDate") or date.today().isoformat()
+            )
         else:
             birthday = date.today().isoformat()
 

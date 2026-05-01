@@ -24,15 +24,7 @@ class LibraryAdapter(ABC):
         raise NotImplementedError()
 
     @abstractmethod
-    async def get_ereolen_loans(self, library):
-        raise NotImplementedError()
-
-    @abstractmethod
     async def get_reservations(self, library):
-        raise NotImplementedError()
-
-    @abstractmethod
-    async def get_ereolen_reservations(self, library):
         raise NotImplementedError()
 
 

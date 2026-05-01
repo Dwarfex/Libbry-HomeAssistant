@@ -195,9 +195,18 @@ class HamburgLibraryAdapter(LibraryAdapter):
     async def _ensure_session(self, library) -> None:
         if library.session is not None:
             return
-        # Always use a dedicated client with a persistent cookie jar and redirects
-        # enabled. HA's shared httpx client may not preserve cookies across requests,
-        # which is required for the Hamburg session-cookie-based auth flow.
+        # Use HA's httpx client factory when hass is available — it initialises SSL
+        # off the event loop, avoiding the "blocking call" warning. When running
+        # outside HA (tests, CLI) create a plain AsyncClient directly.
+        if library.hass is not None:
+            try:
+                library.session = create_async_httpx_client(
+                    library.hass, follow_redirects=True
+                )
+                return
+            except TypeError:
+                library.session = create_async_httpx_client(library.hass)
+                return
         library.session = httpx.AsyncClient(follow_redirects=True)
 
     async def _authenticated_api_get(self, library, item_type: str) -> Any:

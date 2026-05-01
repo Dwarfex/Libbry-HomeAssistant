@@ -45,7 +45,9 @@ HAMBURG_NEXT_ROUTER_STATE_TREE = (
     "null%2Cnull%5D%7D%2Cnull%2Cnull%2Ctrue%5D"
 )
 NEXT_ACTION_PATTERN = re.compile(r"\b[a-f0-9]{40,42}\b")
-LOGIN_PAGE_SCRIPT_PATTERN = re.compile(r'/_next/static/chunks/app/user/login/page-[^"]+\.js')
+LOGIN_PAGE_SCRIPT_PATTERN = re.compile(
+    r'/_next/static/chunks/app/user/login/page-[^"]+\.js'
+)
 
 
 @AdapterRegistry.register
@@ -92,7 +94,9 @@ class HamburgLibraryAdapter(LibraryAdapter):
                         response_payload.get("message") or "Hamburg login failed"
                     )
         except json.JSONDecodeError:
-            LOGGER.debug("Hamburg login returned non-JSON payload, checking auth cookies")
+            LOGGER.debug(
+                "Hamburg login returned non-JSON payload, checking auth cookies"
+            )
 
         missing_cookies = [
             cookie_name
@@ -234,7 +238,9 @@ class HamburgLibraryAdapter(LibraryAdapter):
                     continue
                 raise
 
-        raise ValueError(f"Hamburg request for {item_type} failed after re-authentication")
+        raise ValueError(
+            f"Hamburg request for {item_type} failed after re-authentication"
+        )
 
     @staticmethod
     def _build_api_headers() -> dict[str, str]:

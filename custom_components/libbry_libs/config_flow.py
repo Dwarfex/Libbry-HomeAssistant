@@ -27,7 +27,9 @@ def get_country_options() -> dict[str, str]:
 def get_municipality_options(country: str | None = None) -> dict[str, str]:
     if country and country in LIBRARIES_BY_COUNTRY:
         libraries = LIBRARIES_BY_COUNTRY[country]
-        return {library.name: municipality for municipality, library in libraries.items()}
+        return {
+            library.name: municipality for municipality, library in libraries.items()
+        }
     return {
         f"{c.title()} - {library.name}": municipality
         for c, libs in LIBRARIES_BY_COUNTRY.items()
@@ -102,7 +104,9 @@ class LibraryConfigFlowHandler(ConfigFlow, domain=DOMAIN):
             step_id="user",
             data_schema=vol.Schema(
                 {
-                    vol.Required(CONF_COUNTRY): vol.In(sorted(get_country_options().keys())),
+                    vol.Required(CONF_COUNTRY): vol.In(
+                        sorted(get_country_options().keys())
+                    ),
                 }
             ),
         )

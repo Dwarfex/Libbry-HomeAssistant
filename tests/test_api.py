@@ -43,10 +43,15 @@ def test_unknown_adapter_raises_value_error():
         Library("albertslund", "user", "1234", adapter_name="unknown")
 
 
-def test_hamburg_adapter_methods_are_stubbed():
+def test_hamburg_adapter_exposes_library_contract_methods():
     lib = Library("hamburg buecherhallen", "user", "1234")
-    with pytest.raises(NotImplementedError):
-        asyncio.run(lib.authenticate())
+    assert callable(lib.adapter.authenticate)
+    assert callable(lib.adapter.get_profile_info)
+    assert callable(lib.adapter.get_loans)
+    assert callable(lib.adapter.get_reservations)
+    assert callable(lib.adapter.get_fees)
+    assert callable(lib.adapter.get_ereolen_loans)
+    assert callable(lib.adapter.get_ereolen_reservations)
 
 
 async def test_auth():

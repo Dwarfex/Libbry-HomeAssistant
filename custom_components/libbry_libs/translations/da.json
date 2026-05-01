@@ -3,6 +3,13 @@
         "step": {
             "user": {
                 "title": "Libbry opsætning",
+                "description": "Vælg dit land for at filtrere bibliotekslisten.",
+                "data": {
+                    "country": "Land"
+                }
+            },
+            "library": {
+                "title": "Libbry opsætning",
                 "description": "Log på din biblioteks konto",
                 "data": {
                     "municipality": "Kommune / bibliotek",

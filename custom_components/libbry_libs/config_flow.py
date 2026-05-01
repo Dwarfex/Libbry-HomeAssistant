@@ -10,6 +10,7 @@ from homeassistant.data_entry_flow import FlowResult
 
 from .api import Library
 from .const import (
+    CONF_COUNTRY,
     CONF_GET_EREOLEN,
     CONF_GET_RESERVATIONS,
     CONF_MUNICIPALITY,
@@ -19,11 +20,18 @@ from .const import (
 )
 
 
-def get_municipality_options() -> dict[str, str]:
+def get_country_options() -> dict[str, str]:
+    return {country.title(): country for country in sorted(LIBRARIES_BY_COUNTRY.keys())}
+
+
+def get_municipality_options(country: str | None = None) -> dict[str, str]:
+    if country and country in LIBRARIES_BY_COUNTRY:
+        libraries = LIBRARIES_BY_COUNTRY[country]
+        return {library.name: municipality for municipality, library in libraries.items()}
     return {
-        f"{country.title()} - {library.name}": municipality
-        for country, libraries in LIBRARIES_BY_COUNTRY.items()
-        for municipality, library in libraries.items()
+        f"{c.title()} - {library.name}": municipality
+        for c, libs in LIBRARIES_BY_COUNTRY.items()
+        for municipality, library in libs.items()
     }
 
 
@@ -73,6 +81,7 @@ class LibraryConfigFlowHandler(ConfigFlow, domain=DOMAIN):
     VERSION = 1
 
     def __init__(self):
+        self.country = None
         self.municipality = None
         self.user_id = None
         self.pin = None
@@ -84,14 +93,30 @@ class LibraryConfigFlowHandler(ConfigFlow, domain=DOMAIN):
     async def async_step_user(
         self, user_input: dict[str, Any] | None = None
     ) -> FlowResult:
-        """Handle the initial step."""
+        """Handle the initial step — country selection."""
+        if user_input is not None:
+            self.country = get_country_options()[user_input[CONF_COUNTRY]]
+            return await self.async_step_library()
+
+        return self.async_show_form(
+            step_id="user",
+            data_schema=vol.Schema(
+                {
+                    vol.Required(CONF_COUNTRY): vol.In(sorted(get_country_options().keys())),
+                }
+            ),
+        )
+
+    async def async_step_library(
+        self, user_input: dict[str, Any] | None = None
+    ) -> FlowResult:
+        """Handle library and credentials step."""
         errors: dict[str, str] = {}
 
-        municipality_options = get_municipality_options()
+        municipality_options = get_municipality_options(self.country)
 
         if user_input is not None:
             try:
-                # Instantiate library client and log in
                 library = Library(
                     municipality=municipality_options[user_input[CONF_MUNICIPALITY]],
                     user_id=user_input[CONF_USERNAME],
@@ -113,7 +138,7 @@ class LibraryConfigFlowHandler(ConfigFlow, domain=DOMAIN):
         municipalities = sorted(municipality_options.keys())
 
         return self.async_show_form(
-            step_id="user",
+            step_id="library",
             data_schema=vol.Schema(
                 {
                     vol.Required(CONF_MUNICIPALITY): vol.In(municipalities),

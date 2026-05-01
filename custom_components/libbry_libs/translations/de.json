@@ -3,6 +3,13 @@
         "step": {
             "user": {
                 "title": "Libbry-Konfiguration",
+                "description": "Wählen Sie Ihr Land aus, um die Bibliotheksliste zu filtern.",
+                "data": {
+                    "country": "Land"
+                }
+            },
+            "library": {
+                "title": "Libbry-Konfiguration",
                 "description": "Melden Sie sich mit Ihrem Bibliothekskonto an",
                 "data": {
                     "municipality": "Gemeinde / Bibliothek",

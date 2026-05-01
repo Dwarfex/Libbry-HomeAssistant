@@ -6,6 +6,7 @@ from datetime import timedelta
 
 from .models import LibraryConfig
 
+CONF_COUNTRY = "country"
 CONF_GET_EREOLEN = "get_ereolen"
 CONF_GET_RESERVATIONS = "get_reservations"
 CONF_MUNICIPALITY = "municipality"

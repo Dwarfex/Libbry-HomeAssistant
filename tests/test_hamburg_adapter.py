@@ -35,7 +35,10 @@ class HamburgMockAPI:
             )
 
         if request.url.path == "/api/items" and request.method == "GET":
-            assert request.headers.get("solus-app-id") == "BUECHERHALLEN"
+            assert (
+                request.headers.get("solus-app-id")
+                == "28d4dc2f-692b-472b-870d-5e6c35c4ad26"
+            )
             item_type = request.url.params.get("type")
             self.item_calls[item_type] = self.item_calls.get(item_type, 0) + 1
 

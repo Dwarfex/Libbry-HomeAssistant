@@ -18,7 +18,7 @@ from .base import AdapterRegistry, LibraryAdapter
 HAMBURG_BASE_URL = "https://www2.buecherhallen.de"
 HAMBURG_LOGIN_ENDPOINT = "/user/login"
 HAMBURG_ITEMS_ENDPOINT = "/api/items"
-HAMBURG_APP_ID = "BUECHERHALLEN"
+HAMBURG_APP_ID = "28d4dc2f-692b-472b-870d-5e6c35c4ad26"
 HAMBURG_LOGIN_HEADERS = {
     "Accept": "application/json, text/plain, */*",
     "Content-Type": "application/json;charset=UTF-8",
